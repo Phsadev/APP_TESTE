@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Login</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Login</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" class="form-control" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" class="form-control" id="password" required>
+            </div>
+            <div class="form-group">
+                <label for="userType">Tipo de Usuário</label>
+                <select class="form-control" id="userType">
+                    <option value="admin">Administrador</option>
+                    <option value="participant">Participante</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Entrar</button>
+            <div id="loginError" class="text-danger mt-3" style="display: none;">Credenciais inválidas. Por favor, tente novamente.</div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const userType = document.getElementById('userType').value;
+            const loginError = document.getElementById('loginError');
+
+            if (userType === 'admin' && username === 'admin' && password === 'admin123') {
+                sessionStorage.setItem('authenticated', 'true');
+                window.location.href = 'index.html';
+            } else if (userType === 'participant' && username === 'participant' && password === 'participant123') {
+                sessionStorage.removeItem('authenticated'); // Garante que a sessão do admin não será usada
+                window.location.href = 'view.html';
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

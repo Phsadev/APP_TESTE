@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <title>App Agendamento</title>
+    <script>
+        // Verifica se o usuário está autenticado
+        if (sessionStorage.getItem('authenticated') !== 'true') {
+            window.location.href = "login.html";
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Escala do Louvor</h1>
+        <form>
+            <!-- Campos para demais participantes -->
+            <div class="form-group">
+                <label for="baixo">Participante:</label>
+                <select class="form-control" id="baixo" name="baixo">
+                    <option value="">Selecione um nome:</option>
+                </select>
+            </div>
+            <!-- Outros campos... -->
+            <button type="button" class="btn btn-success" onclick="saveDataAndRedirect()">Salvar</button>
+        </form>
+
+        <!-- Botões para abrir os modais -->
+        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editDatesModal">Editar Datas e Horários</button>
+        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editParticipantModal">Editar Participantes</button>
+        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editLinksModal">Editar Links</button>
+        
+        <!-- Botão para ir para a página view -->
+        <button type="button" class="btn btn-info mt-3" onclick="goToView()">Ver Escala</button>
+
+        <!-- Modal para editar datas e horários -->
+        <div class="modal fade" id="editDatesModal" tabindex="-1" aria-labelledby="editDatesModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editDatesModalLabel">Editar Datas e Horários</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="rehearsalDate">Data do Ensaio:</label>
+                            <input type="date" class="form-control" id="rehearsalDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="rehearsalTime">Horário do Ensaio:</label>
+                            <input type="time" class="form-control" id="rehearsalTime">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventDate">Data do Evento:</label>
+                            <input type="date" class="form-control" id="eventDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="eventTime">Horário do Evento:</label>
+                            <input type="time" class="form-control" id="eventTime">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="saveDates()">Salvar</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para editar participantes -->
+        <div class="modal fade" id="editParticipantModal" tabindex="-1" aria-labelledby="editParticipantModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editParticipantModalLabel">Editar Participantes</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="participantName">Nome do Participante:</label>
+                            <input type="text" class="form-control" id="participantName" oninput="toUpperCase(this)">
+                        </div>
+                        <div class="form-group">
+                            <label for="participantRole">Função:</label>
+                            <select class="form-control" id="participantRole">
+                                <option value="baixo">Baixo</option>
+                                <option value="bateria">Bateria</option>
+                                <option value="guitarra">Guitarra</option>
+                                <option value="teclado1">Teclado 1</option>
+                                <option value="teclado2">Teclado 2</option>
+                                <option value="violao">Violão</option>
+                                <option value="vocal1">Vocal 1</option>
+                                <option value="vocal2">Vocal 2</option>
+                                <option value="vocal3">Vocal 3</option>
+                                <option value="vocal4">Vocal 4</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="saveParticipant()">Salvar</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para editar links -->
+        <div class="modal fade" id="editLinksModal" tabindex="-1" aria-labelledby="editLinksModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editLinksModalLabel">Editar Links</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="videoLinks">Links dos Vídeos:</label>
+                            <textarea class="form-control" id="videoLinks" rows="3"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="chordLinks">Links das Cifras:</label>
+                            <textarea class="form-control" id="chordLinks" rows="3"></textarea>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="saveLinks()">Salvar</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        function goToView() {
+            window.location.href = "view.html";
+        }
+    </script>
+</body>
+</html>

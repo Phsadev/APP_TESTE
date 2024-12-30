@@ -1,0 +1,45 @@
+body {
+    background-image: url('../img/bg-mobile\ -\ Copia.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    color: white;
+}
+
+/* Estiliza o fundo do modal */
+.modal-content {
+    background-color: #180920; /* Cor de fundo personalizada */
+    color: #e0d7d7; /* Cor do texto */
+    border-radius: 10px; /* Bordas arredondadas */
+    padding: 20px; /* Espaçamento interno */
+}
+
+/* Estiliza a barra de título do modal */
+.modal-header {
+    background-color: #3e1f87; /* Cor de fundo da barra de título */
+    color: white; /* Cor do texto na barra de título */
+}
+
+/* Estiliza o botão de fechar */
+.modal-header .close {
+    color: white; /* Cor do ícone de fechar */
+}
+
+/* Estiliza o rodapé do modal */
+.modal-footer {
+    background-color: #230f5a; /* Cor de fundo do rodapé */
+    border-top: none; /* Remove a borda superior */
+}
+
+/* Estiliza os botões */
+.modal-footer .btn-secondary {
+    background-color: #dcdcdc; /* Cor de fundo do botão "Cancelar" */
+    color: black; /* Cor do texto do botão "Cancelar" */
+    border: none; /* Remove a borda */
+}
+
+.modal-footer .btn-primary {
+    background-color: #4682b4; /* Cor de fundo do botão "Adicionar" */
+    color: white; /* Cor do texto do botão "Adicionar" */
+    border: none; /* Remove a borda */
+}

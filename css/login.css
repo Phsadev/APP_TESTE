@@ -1,0 +1,8 @@
+body {
+    margin: 15%;
+    background-image: url('../img/bg-mobile\ -\ Copia.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    color: white;
+}

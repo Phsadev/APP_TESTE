@@ -1,151 +1,137 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Verifica se o usuário está autenticado
-    if (sessionStorage.getItem('authenticated') !== 'true') {
-        window.location.href = "login.html";
+  // Confirma autenticação
+  if (sessionStorage.getItem('authenticated') !== 'true') {
+    window.location.href = "login.html";
+  }
+
+  // Converte o texto para uppercase
+  function toUpperCase(input) {
+    input.value = input.value.toUpperCase();
+  }
+
+  // Salva todos os dados e redireciona para a view
+  function saveDataAndRedirect() {
+    saveData();
+    alert('Dados salvos com sucesso!');
+    window.location.href = "view.html";
+  }
+
+  // Salva os dados gerais (incluindo os dos modais) no localStorage
+  function saveData() {
+    const data = {
+      date: document.getElementById('data') ? document.getElementById('data').value : '',
+      rehearsalTime: document.getElementById('ensaio') ? document.getElementById('ensaio').value : '',
+      worshipTime: document.getElementById('culto') ? document.getElementById('culto').value : '',
+      baixo: document.getElementById('baixo') ? document.getElementById('baixo').value : '',
+      bateria: document.getElementById('bateria') ? document.getElementById('bateria').value : '',
+      guitarra: document.getElementById('guitarra') ? document.getElementById('guitarra').value : '',
+      teclado1: document.getElementById('teclado1') ? document.getElementById('teclado1').value : '',
+      teclado2: document.getElementById('teclado2') ? document.getElementById('teclado2').value : '',
+      violao: document.getElementById('violao') ? document.getElementById('violao').value : '',
+      vocal1: document.getElementById('vocal1') ? document.getElementById('vocal1').value : '',
+      vocal2: document.getElementById('vocal2') ? document.getElementById('vocal2').value : '',
+      vocal3: document.getElementById('vocal3') ? document.getElementById('vocal3').value : '',
+      vocal4: document.getElementById('vocal4') ? document.getElementById('vocal4').value : '',
+      rehearsalDate: document.getElementById('rehearsalDate') ? document.getElementById('rehearsalDate').value : '',
+      rehearsalTimeModal: document.getElementById('rehearsalTime') ? document.getElementById('rehearsalTime').value : '',
+      eventDate: document.getElementById('eventDate') ? document.getElementById('eventDate').value : '',
+      eventTime: document.getElementById('eventTime') ? document.getElementById('eventTime').value : '',
+      videoLinks: document.getElementById('videoLinks') ? document.getElementById('videoLinks').value : '',
+      chordLinks: document.getElementById('chordLinks') ? document.getElementById('chordLinks').value : ''
+    };
+    localStorage.setItem('scaleData', JSON.stringify(data));
+  }
+
+  // -------------------
+  // Gerenciamento de Participantes via modal
+  // -------------------
+
+  function addParticipant() {
+    const participantName = document.getElementById('participantName').value;
+    const participantRole = document.getElementById('participantRole').value;
+
+    if (participantName && participantRole) {
+      // Temos o select identificado pelo valor de participantRole (ex: "baixo", "bateria", etc.)
+      const selectElement = document.getElementById(participantRole);
+      const option = document.createElement('option');
+      option.value = participantName.toUpperCase();
+      option.text = participantName.toUpperCase();
+      selectElement.add(option);
+
+      // Limpa os campos do modal
+      document.getElementById('participantName').value = '';
+      document.getElementById('participantRole').value = 'baixo';
+      $('#editParticipantModal').modal('hide');
+    } else {
+      alert('Por favor, preencha todos os campos.');
     }
+  }
 
-    // Função para transformar texto em uppercase
-    function toUpperCase(input) {
-        input.value = input.value.toUpperCase();
-    }
+  function editParticipant() {
+    const participantName = document.getElementById('participantName').value.toUpperCase();
+    const participantRole = document.getElementById('participantRole').value;
 
-    // Função para salvar os dados e redirecionar
-    function saveDataAndRedirect() {
-        saveData();
-        window.location.href = "view.html";
-    }
-
-    // Função para salvar os dados (pode ser expandida conforme necessário)
-    function saveData() {
-        const data = {
-            date: document.getElementById('data').value,
-            rehearsalTime: document.getElementById('ensaio').value,
-            worshipTime: document.getElementById('culto').value,
-            baixo: document.getElementById('baixo').value,
-            bateria: document.getElementById('bateria').value,
-            guitarra: document.getElementById('guitarra').value,
-            teclado1: document.getElementById('teclado1').value,
-            teclado2: document.getElementById('teclado2').value,
-            violao: document.getElementById('violao').value,
-            vocal1: document.getElementById('vocal1').value,
-            vocal2: document.getElementById('vocal2').value,
-            vocal3: document.getElementById('vocal3').value,
-            vocal4: document.getElementById('vocal4').value,
-            rehearsalDate: document.getElementById('rehearsalDate').value,
-            rehearsalTimeModal: document.getElementById('rehearsalTime').value,
-            eventDate: document.getElementById('eventDate').value,
-            eventTime: document.getElementById('eventTime').value,
-            videoLinks: document.getElementById('videoLinks').value,
-            chordLinks: document.getElementById('chordLinks').value
-        };
-        localStorage.setItem('scaleData', JSON.stringify(data));
-        alert('Dados salvos com sucesso!');
-    }
-
-    // Função para adicionar participante pelo modal
-    function addParticipant() {
-        const participantName = document.getElementById('participantName').value;
-        const participantRole = document.getElementById('participantRole').value;
-
-        if (participantName && participantRole) {
-            const selectElement = document.getElementById(participantRole);
-            const option = document.createElement('option');
-            option.value = participantName.toUpperCase();
-            option.text = participantName.toUpperCase();
-            selectElement.add(option);
-
-            // Limpar os campos do modal
-            document.getElementById('participantName').value = '';
-            document.getElementById('participantRole').value = 'baixo';
-            
-            // Fechar o modal
-            $('#editParticipantModal').modal('hide');
-        } else {
-            alert('Por favor, preencha todos os campos.');
+    if (participantName && participantRole) {
+      const selectElement = document.getElementById(participantRole);
+      for (let i = 0; i < selectElement.options.length; i++) {
+        if (selectElement.options[i].value === participantName) {
+          selectElement.options[i].text = participantName;
+          break;
         }
+      }
+      document.getElementById('participantName').value = '';
+      document.getElementById('participantRole').value = 'baixo';
+      $('#editParticipantModal').modal('hide');
+    } else {
+      alert('Por favor, preencha todos os campos.');
     }
+  }
 
-    // Função para editar um participante
-    function editParticipant() {
-        const participantName = document.getElementById('participantName').value.toUpperCase();
-        const participantRole = document.getElementById('participantRole').value;
+  function deleteParticipantFromModal() {
+    const participantRole = document.getElementById('participantRole').value;
+    const participantName = document.getElementById('participantName').value.toUpperCase();
+    const selectElement = document.getElementById(participantRole);
 
-        if (participantName && participantRole) {
-            const selectElement = document.getElementById(participantRole);
-            for (let i = 0; i < selectElement.options.length; i++) {
-                if (selectElement.options[i].value === participantName) {
-                    selectElement.options[i].text = participantName;
-                    break;
-                }
-            }
-
-            // Limpar os campos do modal
-            document.getElementById('participantName').value = '';
-            document.getElementById('participantRole').value = 'baixo';
-            
-            // Fechar o modal
-            $('#editParticipantModal').modal('hide');
-        } else {
-            alert('Por favor, preencha todos os campos.');
-        }
+    for (let i = 0; i < selectElement.options.length; i++) {
+      if (selectElement.options[i].value === participantName) {
+        selectElement.remove(i);
+        break;
+      }
     }
+    document.getElementById('participantName').value = '';
+    document.getElementById('participantRole').value = 'baixo';
+  }
 
-    // Função para excluir um participante no modal
-    function deleteParticipantFromModal() {
-        const participantRole = document.getElementById('participantRole').value;
-        const participantName = document.getElementById('participantName').value.toUpperCase();
-        const selectElement = document.getElementById(participantRole);
+  // -------------------
+  // Salvar dados pelo modal: Datas/Horários e Links
+  // -------------------
 
-        for (let i = 0; i < selectElement.options.length; i++) {
-            if (selectElement.options[i].value === participantName) {
-                selectElement.remove(i);
-                break;
-            }
-        }
+  function saveDates() {
+    let data = JSON.parse(localStorage.getItem('scaleData')) || {};
+    data.rehearsalDate = document.getElementById('rehearsalDate').value;
+    data.rehearsalTimeModal = document.getElementById('rehearsalTime').value;
+    data.eventDate = document.getElementById('eventDate').value;
+    data.eventTime = document.getElementById('eventTime').value;
+    localStorage.setItem('scaleData', JSON.stringify(data));
+    alert('Datas e horários salvos com sucesso!');
+    $('#editDatesModal').modal('hide');
+  }
 
-        // Limpar os campos do modal
-        document.getElementById('participantName').value = '';
-        document.getElementById('participantRole').value = 'baixo';
-    }
+  function saveLinks() {
+    let data = JSON.parse(localStorage.getItem('scaleData')) || {};
+    data.videoLinks = document.getElementById('videoLinks').value;
+    data.chordLinks = document.getElementById('chordLinks').value;
+    localStorage.setItem('scaleData', JSON.stringify(data));
+    alert('Links salvos com sucesso!');
+    $('#editLinksModal').modal('hide');
+  }
 
-    // Função para salvar datas e horários do modal
-    function saveDates() {
-        const rehearsalDate = document.getElementById('rehearsalDate').value;
-        const rehearsalTime = document.getElementById('rehearsalTime').value;
-        const eventDate = document.getElementById('eventDate').value;
-        const eventTime = document.getElementById('eventTime').value;
-
-        // Salvar as informações de datas e horários (expandir conforme necessário)
-        // Exemplo:
-        console.log(`Data do Ensaio: ${rehearsalDate}, Horário do Ensaio: ${rehearsalTime}, Data do Evento: ${eventDate}, Horário do Evento: ${eventTime}`);
-        
-        alert('Datas e horários salvos com sucesso!');
-        
-        // Fechar o modal
-        $('#editDatesModal').modal('hide');
-    }
-
-    // Função para salvar links do modal
-    function saveLinks() {
-        const videoLinks = document.getElementById('videoLinks').value;
-        const chordLinks = document.getElementById('chordLinks').value;
-
-        // Salvar as informações dos links (expandir conforme necessário)
-        // Exemplo:
-        console.log(`Links dos Vídeos: ${videoLinks}, Links das Cifras: ${chordLinks}`);
-
-        alert('Links salvos com sucesso!');
-
-        // Fechar o modal
-        $('#editLinksModal').modal('hide');
-    }
-
-    // Torna as funções acessíveis no escopo global
-    window.toUpperCase = toUpperCase;
-    window.saveDataAndRedirect = saveDataAndRedirect;
-    window.addParticipant = addParticipant;
-    window.editParticipant = editParticipant;
-    window.deleteParticipantFromModal = deleteParticipantFromModal;
-    window.saveDates = saveDates;
-    window.saveLinks = saveLinks;
+  // Expor as funções para o escopo global
+  window.toUpperCase = toUpperCase;
+  window.saveDataAndRedirect = saveDataAndRedirect;
+  window.addParticipant = addParticipant;
+  window.editParticipant = editParticipant;
+  window.deleteParticipantFromModal = deleteParticipantFromModal;
+  window.saveDates = saveDates;
+  window.saveLinks = saveLinks;
 });

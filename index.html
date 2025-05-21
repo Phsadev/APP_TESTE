@@ -1,153 +1,155 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <title>App Agendamento</title>
-    <script>
-        // Verifica se o usuário está autenticado
-        if (sessionStorage.getItem('authenticated') !== 'true') {
-            window.location.href = "login.html";
-        }
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Agendamento - Escala do Louvor</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Verifica se o usuário está autenticado
+    if (sessionStorage.getItem('authenticated') !== 'true') {
+      window.location.href = "login.html";
+    }
+  </script>
+  <!-- Regras customizadas para os botões no index -->
+  <style>
+    .index-btn {
+      display: block;         /* Faz o botão ocupar uma linha */
+      width: 80%;             /* Largura menor que 100% para reduzir o tamanho */
+      margin: 12px auto;      /* Espaçamento vertical e centralização horizontal */
+      font-size: 0.85rem;      /* Texto menor */
+      padding: 8px 0;         /* Menor padding para reduzir o botão */
+      margin-top: 45px;       /* Espaçamento maior no topo */
+    }
+  </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Escala do Louvor</h1>
-        <form>
-            <!-- Campos para demais participantes -->
-            <div class="form-group">
-                <label for="baixo">Participante:</label>
-                <select class="form-control" id="baixo" name="baixo">
-                    <option value="">Selecione um nome:</option>
-                </select>
-            </div>
-            <!-- Outros campos... -->
-            <button type="button" class="btn btn-success" onclick="saveDataAndRedirect()">Salvar</button>
-        </form>
-
-        <!-- Botões para abrir os modais -->
-        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editDatesModal">Editar Datas e Horários</button>
-        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editParticipantModal">Editar Participantes</button>
-        <button type="button" class="btn btn-primary mt-3" data-toggle="modal" data-target="#editLinksModal">Editar Links</button>
-        
-        <!-- Botão para ir para a página view -->
-        <button type="button" class="btn btn-info mt-3" onclick="goToView()">Ver Escala</button>
-
-        <!-- Modal para editar datas e horários -->
-        <div class="modal fade" id="editDatesModal" tabindex="-1" aria-labelledby="editDatesModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editDatesModalLabel">Editar Datas e Horários</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="rehearsalDate">Data do Ensaio:</label>
-                            <input type="date" class="form-control" id="rehearsalDate">
-                        </div>
-                        <div class="form-group">
-                            <label for="rehearsalTime">Horário do Ensaio:</label>
-                            <input type="time" class="form-control" id="rehearsalTime">
-                        </div>
-                        <div class="form-group">
-                            <label for="eventDate">Data do Evento:</label>
-                            <input type="date" class="form-control" id="eventDate">
-                        </div>
-                        <div class="form-group">
-                            <label for="eventTime">Horário do Evento:</label>
-                            <input type="time" class="form-control" id="eventTime">
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="saveDates()">Salvar</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para editar participantes -->
-        <div class="modal fade" id="editParticipantModal" tabindex="-1" aria-labelledby="editParticipantModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editParticipantModalLabel">Editar Participantes</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="participantName">Nome do Participante:</label>
-                            <input type="text" class="form-control" id="participantName" oninput="toUpperCase(this)">
-                        </div>
-                        <div class="form-group">
-                            <label for="participantRole">Função:</label>
-                            <select class="form-control" id="participantRole">
-                                <option value="baixo">Baixo</option>
-                                <option value="bateria">Bateria</option>
-                                <option value="guitarra">Guitarra</option>
-                                <option value="teclado1">Teclado 1</option>
-                                <option value="teclado2">Teclado 2</option>
-                                <option value="violao">Violão</option>
-                                <option value="vocal1">Vocal 1</option>
-                                <option value="vocal2">Vocal 2</option>
-                                <option value="vocal3">Vocal 3</option>
-                                <option value="vocal4">Vocal 4</option>
-                            </select>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="saveParticipant()">Salvar</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal para editar links -->
-        <div class="modal fade" id="editLinksModal" tabindex="-1" aria-labelledby="editLinksModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editLinksModalLabel">Editar Links</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="videoLinks">Links dos Vídeos:</label>
-                            <textarea class="form-control" id="videoLinks" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="chordLinks">Links das Cifras:</label>
-                            <textarea class="form-control" id="chordLinks" rows="3"></textarea>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="saveLinks()">Salvar</button>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <!-- Espaçamento maior no topo para afastar do header da página -->
+  <div class="container text-center" style="margin-top: 100px;">
+    <h1 class="mb-5">Escala do Louvor</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- Botões com a classe custom .index-btn -->
+        <button class="btn btn-primary index-btn" data-toggle="modal" data-target="#editDatesModal">
+          Editar Datas e Horários
+        </button>
+        <button class="btn btn-primary index-btn" data-toggle="modal" data-target="#editParticipantModal">
+          Editar Participantes
+        </button>
+        <button class="btn btn-primary index-btn" data-toggle="modal" data-target="#editLinksModal">
+          Editar Links
+        </button>
+        <button class="btn btn-success index-btn" onclick="saveDataAndRedirect()">
+          Salvar & Ver Escala
+        </button>
+      </div>
     </div>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
-    <script>
-        function goToView() {
-            window.location.href = "view.html";
-        }
-    </script>
+  <!-- Modal: Editar Datas e Horários -->
+  <div class="modal fade" id="editDatesModal" tabindex="-1" role="dialog" aria-labelledby="editDatesModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editDatesModalLabel">Editar Datas e Horários</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="date" class="form-control" id="rehearsalDate" placeholder="Data do Ensaio">
+          </div>
+          <div class="form-group">
+            <input type="time" class="form-control" id="rehearsalTime" placeholder="Horário do Ensaio">
+          </div>
+          <div class="form-group">
+            <input type="date" class="form-control" id="eventDate" placeholder="Data do Evento">
+          </div>
+          <div class="form-group">
+            <input type="time" class="form-control" id="eventTime" placeholder="Horário do Evento">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="saveDates()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Participantes -->
+  <div class="modal fade" id="editParticipantModal" tabindex="-1" role="dialog" aria-labelledby="editParticipantModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editParticipantModalLabel">Editar Participantes</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Sem label para manter a interface mais limpa -->
+          <div class="form-group">
+            <input type="text" class="form-control" id="participantName" placeholder="Nome do Participante" oninput="toUpperCase(this)">
+          </div>
+          <div class="form-group">
+            <select class="form-control" id="participantRole">
+              <option value="baixo">Baixo</option>
+              <option value="bateria">Bateria</option>
+              <option value="guitarra">Guitarra</option>
+              <option value="teclado1">Teclado 1</option>
+              <option value="teclado2">Teclado 2</option>
+              <option value="violao">Violão</option>
+              <option value="vocal1">Vocal 1</option>
+              <option value="vocal2">Vocal 2</option>
+              <option value="vocal3">Vocal 3</option>
+              <option value="vocal4">Vocal 4</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" onclick="deleteParticipantFromModal()">Excluir</button>
+          <button type="button" class="btn btn-warning" onclick="editParticipant()">Editar</button>
+          <button type="button" class="btn btn-primary" onclick="addParticipant()">Adicionar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Editar Links -->
+  <div class="modal fade" id="editLinksModal" tabindex="-1" role="dialog" aria-labelledby="editLinksModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editLinksModalLabel">Editar Links</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <textarea class="form-control" id="videoLinks" placeholder="Links dos Vídeos (separados por vírgula)" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <textarea class="form-control" id="chordLinks" placeholder="Links das Cifras (separados por vírgula)" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="saveLinks()">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inclusão dos scripts (ordem: jQuery completo, Popper, Bootstrap, seu script) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>

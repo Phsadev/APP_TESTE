@@ -1,9 +1,13 @@
+/* Regras originais */
 body {
-    background-image: url('../img/bg-mobile\ -\ Copia.jpg');
+    background-image: url('../img/bg-mobile - Copia.jpg');
     background-size: cover;
     background-position: center;
     height: 100vh;
     color: white;
+    /* Novos espaços para deixar o conteúdo mais centrado */
+    padding-top: 40px;
+    padding-bottom: 40px;
 }
 
 /* Estiliza o fundo do modal */
@@ -31,7 +35,7 @@ body {
     border-top: none; /* Remove a borda superior */
 }
 
-/* Estiliza os botões */
+/* Estiliza os botões do modal */
 .modal-footer .btn-secondary {
     background-color: #dcdcdc; /* Cor de fundo do botão "Cancelar" */
     color: black; /* Cor do texto do botão "Cancelar" */
@@ -42,4 +46,35 @@ body {
     background-color: #4682b4; /* Cor de fundo do botão "Adicionar" */
     color: white; /* Cor do texto do botão "Adicionar" */
     border: none; /* Remove a borda */
+}
+
+/* -------------------------
+   Melhorias de espaçamento e layout
+---------------------------- */
+
+/* Define a largura máxima do container e centraliza-o */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Espaçamento para os botões que usam a classe btn-block */
+.btn-block {
+    margin-bottom: 20px; /* Aumentei o espaço entre os botões */
+}
+
+/* Espaçamento interno para os grupos dos formulários dentro dos modais */
+.modal-body .form-group {
+    margin-bottom: 15px;
+}
+/* Regras específicas para a view */
+#scaleView {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+#scaleView p {
+    margin-bottom: 15px;
+    font-size: 1.1em;
 }
